@@ -18,11 +18,6 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with FEMTests.  If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************************************************************/
-
-//
-// Created by Adam Blake on 1/26/2018.
-//
-
 #ifndef FEMTESTS_NEUMANNTYPEBC_H
 #define FEMTESTS_NEUMANNTYPEBC_H
 
