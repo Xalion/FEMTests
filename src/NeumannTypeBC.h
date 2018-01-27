@@ -43,12 +43,14 @@ public:
         tinyxml2::XMLText *typeNode = boundryNode->FirstChildElement( "Type" )->FirstChild()->ToText();
         std::string type( typeNode->Value());
 
+        valid = true;
+
         if ( type != "Neumann" ) {
             valid = false;
             return bc;
         }
 
-        int dimension = boundryNode->IntAttribute( "Dim" );
+        int dimension = boundryNode->FirstChildElement("Dim")->IntText();
         if ( dimension != dim ) {
             valid = false;
             return bc;
@@ -61,14 +63,17 @@ public:
             double val = valueNode->DoubleText();
             gammaVec.push_back( val );
         }
+        bc.mGamma = gammaVec;
 
         currentNode = boundryNode->FirstChildElement( "q" );
         std::vector<double> qVec;
         for ( tinyxml2::XMLElement *valueNode = currentNode->FirstChildElement( "value" );
               valueNode != NULL; valueNode = valueNode->NextSiblingElement()) {
             double val = valueNode->DoubleText();
-            gammaVec.push_back( val );
+            qVec.push_back( val );
         }
+        bc.mQ = qVec;
+        return bc;
     }
 
     template<int T>
@@ -86,7 +91,7 @@ NeumannTypeBC<dim>::NeumannTypeBC() : mGamma( dim ), mQ( dim ) {}
 template<int dim>
 double NeumannTypeBC<dim>::getGamma( int inDim ) const {
     assert( inDim < dim );
-    return mGamma[ dim ];
+    return mGamma[ inDim ];
 }
 
 template<int dim>

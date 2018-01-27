@@ -25,7 +25,7 @@ std::string sXmlBcData (
 TEST( DirichletTypeBCTests, testFromXML ) {
 
     tinyxml2::XMLDocument doc;
-    doc.SetValue( sXmlBcData.c_str() );
+    doc.Parse( sXmlBcData.c_str() );
     tinyxml2::XMLElement *xmlElement = doc.FirstChild()->ToElement();
 
     bool isValid = false;
