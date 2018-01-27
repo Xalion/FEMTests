@@ -23,6 +23,7 @@
 //
 
 #include "OneDProblemFormulation.h"
+#include "BCReader.h"
 
 #include <tinyxml2.h>
 
@@ -99,9 +100,18 @@ OneDProblemFormulation::err_t OneDProblemFormulation::setFromXmlString( std::str
 
     if ( alphaVec.size() != elements || betaVec.size() != elements || fVec.size() != numElements ||
          lVec.size() != numElements ) {
-        return false;
+        return -1;
     }
 
-    // TODO : boundary element reader
+    BCReader<1> reader;
+    tinyxml2::XMLElement *bcElement = problemData->FirstChildElement( "BoundaryCondition" );
+    bool success = false;
+    typename FEMTests::BoundaryCondition<1> bc = reader.readBoundryConditions( success, bcElement );
+    if( !success ) {
+        return -1;
+    }
+
+    boundaryCondition = bc;
+    return 0;
 }
 }

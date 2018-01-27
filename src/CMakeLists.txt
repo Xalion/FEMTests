@@ -6,14 +6,14 @@ set( FEMTests_SOURCE_FILES
         BoundaryCondition.cpp
         DirichletTypeBC.cpp
         NeumannTypeBC.cpp
-        )
+        BCReader.cpp BCReader.h )
 
 set( FEMTests_HEADER_FILES
         OneDFEMSOlver.h
         OneDProblemFormulation.h
         BoundaryCondition.h
         DirichletTypeBC.h
-        NeumannTypeBC.h )
+        NeumannTypeBC.h BCReader.cpp BCReader.h )
 
 include_directories( ${CMAKE_CURRENT_LIST_DIR} ${XML_INCLUDE_DIRS} )
 

@@ -23,36 +23,45 @@
 // Created by Adam Blake on 1/26/2018.
 //
 
-#ifndef FEMTESTS_ONEDPROBLEMFORMULATION_H
-#define FEMTESTS_ONEDPROBLEMFORMULATION_H
+#ifndef FEMTESTS_BCREADER_H
+#define FEMTESTS_BCREADER_H
 
-
+#include <tinyxml2.h>
 #include <BoundaryCondition.h>
-
-#include <vector>
-#include <iostream>
-#include <iomanip>
+#include <NeumannTypeBC.h>
+#include <DirichletTypeBC.h>
 
 namespace FEMTests {
-class OneDProblemFormulation {
+
+template<int dim>
+class BCReader {
 public:
-    typedef int err_t;
 
-    int numElements;
+    BoundaryCondition<dim> readBoundryConditions( bool &success, tinyxml2::XMLElement *boundryNode ) {
+        success = false;
+        
+        BoundaryCondition<dim> bc;
 
-    std::vector<double> alpha;
-    std::vector<double> beta;
-    std::vector<double> f;
-    std::vector<double> l;
+        bc = tryReader<NeumannTypeBC<dim>>( success, boundryNode );
+        if( success ) {
+            return bc;
+        }
 
-    BoundaryCondition<1> boundaryCondition;
+        bc = tryReader<DirichletTypeBC<dim>>( success, boundryNode );
+        if( success ) {
+            return bc;
+        }
 
-    friend std::ostream &operator<<( std::ostream &os, const OneDProblemFormulation & );
+        return bc;
+    }
 
-    err_t setFromXmlString( std::string xmlData );
+private:
+    template<typename T>
+    BoundaryCondition<dim> tryReader( bool &success, tinyxml2::XMLElement *boundryNode ) {
+        return T::parseXmlString( success, boundryNode );
+    }
 };
 
-}
 
-
-#endif //FEMTESTS_ONEDPROBLEMFORMULATION_H
+} // namespace FEMTests
+#endif //FEMTESTS_BCREADER_H

@@ -2,20 +2,20 @@
 <ProblemData>
     <Dim>1</Dim>
     <Elements>5</Elements>
-    <Alpha>
+    <alpha>
         <value>0.1</value>
         <value>0.2</value>
         <value>0.3</value>
         <value>0.4</value>
         <value>0.5</value>
-    </Alpha>
-    <Beta>
+    </alpha>
+    <beta>
         <value>0.1</value>
         <value>0.2</value>
         <value>0.3</value>
         <value>0.4</value>
         <value>0.5</value>
-    </Beta>
+    </beta>
     <f>
         <value>0.1</value>
         <value>0.2</value>

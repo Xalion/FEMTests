@@ -25,7 +25,9 @@ set( TEST_HEADERS
 
 set( TEST_SOURCES
         NeumannTypeBCTests.cpp
-        DirichletTypeBCTests.cpp )
+        DirichletTypeBCTests.cpp
+        OneDProblemFormulationTests.cpp
+        )
 
 set( testname ${PROJECT_NAME} )
 

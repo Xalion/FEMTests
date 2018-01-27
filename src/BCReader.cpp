@@ -18,41 +18,12 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with FEMTests.  If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************************************************************/
-
 //
 // Created by Adam Blake on 1/26/2018.
 //
 
-#ifndef FEMTESTS_ONEDPROBLEMFORMULATION_H
-#define FEMTESTS_ONEDPROBLEMFORMULATION_H
-
-
-#include <BoundaryCondition.h>
-
-#include <vector>
-#include <iostream>
-#include <iomanip>
+#include <BCReader.h>
 
 namespace FEMTests {
-class OneDProblemFormulation {
-public:
-    typedef int err_t;
 
-    int numElements;
-
-    std::vector<double> alpha;
-    std::vector<double> beta;
-    std::vector<double> f;
-    std::vector<double> l;
-
-    BoundaryCondition<1> boundaryCondition;
-
-    friend std::ostream &operator<<( std::ostream &os, const OneDProblemFormulation & );
-
-    err_t setFromXmlString( std::string xmlData );
-};
-
-}
-
-
-#endif //FEMTESTS_ONEDPROBLEMFORMULATION_H
+} // namespace FEMTests
