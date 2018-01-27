@@ -8,7 +8,8 @@ set( FEMTests_SOURCE_FILES
         NeumannTypeBC.cpp
         BCReader.cpp
         Utility/SampleProblem.cpp
-        MatrixFill.cpp )
+        MatrixFillOneD.cpp
+        KMatrixOneD.cpp )
 
 set( FEMTests_HEADER_FILES
         OneDFEMSOlver.h
@@ -18,7 +19,8 @@ set( FEMTests_HEADER_FILES
         NeumannTypeBC.h
         BCReader.h
         Utility/SampleProblem.h
-        MatrixFill.h )
+        MatrixFillOneD.h
+        KMatrixOneD.h )
 
 include_directories( ${CMAKE_CURRENT_LIST_DIR} ${XML_INCLUDE_DIRS} )
 

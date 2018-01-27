@@ -50,6 +50,8 @@ public:
     friend std::ostream &operator<<( std::ostream &os, const OneDProblemFormulation & );
 
     err_t setFromXmlString( std::string xmlData );
+
+    bool isEdgeElement( int elementIndex );
 };
 
 }

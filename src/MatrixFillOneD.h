@@ -18,12 +18,40 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with FEMTests.  If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************************************************************/
+
 //
 // Created by Adam Blake on 1/27/2018.
 //
 
-#include <MatrixFill.h>
+#ifndef FEMTESTS_MATRIXFILL_H
+#define FEMTESTS_MATRIXFILL_H
+
+#include <OneDProblemFormulation.h>
+
+#include <vector>
 
 namespace FEMTests {
 
+
+class MatrixFillOneD {
+public:
+    static std::vector<double> computeDiagonalElements( const OneDProblemFormulation &problem );
+
+    /**
+     * \brief Compute the off diagonal elements for the matrix.  Note that for a 1D matrix like this, there
+     * are only 2 values per row that are off diagonal, and they are equal.  So this just returns a vector of k
+     * where k satisfies:
+     *  k_i+1, i = k_i, i+1
+     * and
+     *  returnVec[ i ] = k_i+1, i
+     *
+     * @param problem
+     * @return
+     */
+    static std::vector<double> computeOffDiagonalElements( const OneDProblemFormulation &problem );
+
+};
+
+
 } // namespace FEMTests
+#endif //FEMTESTS_MATRIXFILL_H

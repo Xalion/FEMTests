@@ -23,16 +23,32 @@
 // Created by Adam Blake on 1/27/2018.
 //
 
-#ifndef FEMTESTS_MATRIXFILL_H
-#define FEMTESTS_MATRIXFILL_H
+#ifndef FEMTESTS_KMATRIX_H
+#define FEMTESTS_KMATRIX_H
+
+#include <OneDProblemFormulation.h>
+#include <MatrixFillOneD.h>
 
 namespace FEMTests {
 
+class KMatrixOneD {
+public:
+    KMatrixOneD( const OneDProblemFormulation& problem );
 
-class MatrixFill {
+    void computeMatrixFill();
 
+    std::vector< double > getDiagonalElements();
+
+    friend std::ostream &operator<<( std::ostream &os, const KMatrixOneD &k );
+
+    double getElement( int row, int column ) const;
+
+private:
+    const OneDProblemFormulation mProblem;
+    std::vector< double > mDiagonalVector;
+    std::vector< double > mOffDiagonalVector;
 };
 
 
 } // namespace FEMTests
-#endif //FEMTESTS_MATRIXFILL_H
+#endif //FEMTESTS_KMATRIX_H

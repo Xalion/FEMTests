@@ -114,4 +114,8 @@ OneDProblemFormulation::err_t OneDProblemFormulation::setFromXmlString( std::str
     boundaryCondition = bc;
     return 0;
 }
+
+bool OneDProblemFormulation::isEdgeElement( int elementIndex ) {
+    return elementIndex == 0 || elementIndex == ( numElements - 1);
+}
 }
