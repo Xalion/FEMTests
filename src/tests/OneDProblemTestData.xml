@@ -40,5 +40,13 @@
             <value>0.1</value>
         </q>
     </BoundryCondition>
-    <!-- Do the BC once the readers are done -->
+   <!--
+    <BoundryCondition>
+        <Type>Dirichlet</Type>
+        <Dim>1</Dim>
+        <rho>
+            <value>0.1</value>
+        </rho>
+    </BoundryCondition>
+    -->
 </ProblemData>

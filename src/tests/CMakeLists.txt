@@ -25,7 +25,7 @@ set( TEST_HEADERS
 
 set( TEST_SOURCES
         NeumannTypeBCTests.cpp
-         )
+        DirichletTypeBCTests.cpp )
 
 set( testname ${PROJECT_NAME} )
 

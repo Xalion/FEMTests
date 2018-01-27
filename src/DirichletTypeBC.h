@@ -45,6 +45,7 @@ public:
     template<int T>
     friend std::ostream &operator<<( std::ostream &os, const DirichletTypeBC<T> &bc );
 
+    static DirichletTypeBC<dim> parseXmlString( bool &valid, tinyxml2::XMLElement *boundryNode );
 private:
     std::vector<double> mRho;
 
@@ -71,6 +72,35 @@ std::ostream &operator<<( std::ostream &os, const DirichletTypeBC<T> &bc ) {
            << std::setw( 10 ) << bc.mRho[ ii ] << std::endl;
     }
     return os;
+}
+
+template<int dim>
+DirichletTypeBC<dim> DirichletTypeBC<dim>::parseXmlString( bool &valid, tinyxml2::XMLElement *boundryNode ) {
+    DirichletTypeBC<dim> bc;
+
+    tinyxml2::XMLText *typeNode = boundryNode->FirstChildElement( "Type" )->FirstChild()->ToText();
+    std::string type( typeNode->Value());
+    valid = true;
+    if ( type != "Dirichlet" ) {
+        valid = false;
+        return bc;
+    }
+
+    int dimension = boundryNode->FirstChildElement("Dim")->IntText();
+    if ( dimension != dim ) {
+        valid = false;
+        return bc;
+    }
+
+    tinyxml2::XMLElement *currentNode = boundryNode->FirstChildElement( "rho" );
+    std::vector<double> rhoVec;
+    for ( tinyxml2::XMLElement *valueNode = currentNode->FirstChildElement( "value" );
+          valueNode != NULL; valueNode = valueNode->NextSiblingElement()) {
+        double val = valueNode->DoubleText();
+        rhoVec.push_back( val );
+    }
+    bc.mRho = rhoVec;
+    return bc;
 }
 }
 

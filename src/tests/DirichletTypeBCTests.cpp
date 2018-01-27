@@ -20,42 +20,37 @@
 **********************************************************************************************************************/
 
 #include <gtest/gtest.h>
-#include <NeumannTypeBC.h>
-
+#include <DirichletTypeBC.h>
 namespace FEMTests {
 namespace tests {
+
 namespace {
 
 
 std::string sXmlBcData(
         "<BoundryCondition>"
-        "   <Type>Neumann</Type>"
+        "   <Type>Dirichlet</Type>"
         "   <Dim>1</Dim>"
-        "   <gamma>"
+        "   <rho>"
         "       <value>0.1</value>"
-        "   </gamma>"
-        "   <q>"
-        "       <value>0.1</value>"
-        "   </q>"
+        "   </rho>"
         "</BoundryCondition>"
 );
 
 }
 
-TEST( NeumannTypeBCTests, testFromXML ) {
-
+TEST( DirichletTypeBCTest, testFromXML ) {
     tinyxml2::XMLDocument doc;
-    doc.Parse( sXmlBcData.c_str());
+    doc.Parse( sXmlBcData.c_str() );
     tinyxml2::XMLElement *xmlElement = doc.FirstChild()->ToElement();
 
     bool isValid = false;
 
-    NeumannTypeBC<1> bc = NeumannTypeBC<1>::parseXmlString( isValid, xmlElement );
+    DirichletTypeBC<1> bc = DirichletTypeBC<1>::parseXmlString(isValid, xmlElement);
 
     ASSERT_TRUE( isValid ) << "isValid returned false.";
-    ASSERT_EQ( 1, bc.getDim()) << "getDim returned the wrong value.";
-    ASSERT_EQ( 0.1, bc.getGamma( 0 )) << "getGamma returned the wrong value";
-    ASSERT_EQ( 0.1, bc.getQ( 0 )) << "getQ returned the wrong value.";
+    ASSERT_EQ( 1, bc.getDim() ) << "getDim returned the wrong value.";
+    ASSERT_EQ( 0.1, bc.getRho( 0 ) ) << "getRho returned the wrong value";
 }
 
 }
