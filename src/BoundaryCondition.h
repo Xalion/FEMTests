@@ -23,8 +23,8 @@
 // Created by Adam Blake on 1/26/2018.
 //
 
-#ifndef FEMTESTS_ONEDBOUNDRYCONDITION_H
-#define FEMTESTS_ONEDBOUNDRYCONDITION_H
+#ifndef FEMTESTS_ONEDBoundaryCONDITION_H
+#define FEMTESTS_ONEDBoundaryCONDITION_H
 
 #include <tinyxml2.h>
 
@@ -33,14 +33,14 @@
 namespace FEMTests {
 
 template< int dim >
-class BoundryCondition
+class BoundaryCondition
 {
 public:
 
     int getDim() const;
 
     // Make one of these for parsing.
-    // static BoundryCondition parseXmlString( bool &valid, tinyxml2::XMLText* boundryNode ) = 0;
+    // static BoundaryCondition parseXmlString( bool &valid, tinyxml2::XMLText* BoundaryNode ) = 0;
 
     // TODO : write XML type.  Not necissary right off.
 private:
@@ -48,10 +48,10 @@ private:
 };
 
 template<int dim>
-int BoundryCondition<dim>::getDim() const { return dim; }
+int BoundaryCondition<dim>::getDim() const { return dim; }
 
 }
 
 
 
-#endif //FEMTESTS_ONEDBOUNDRYCONDITION_H
+#endif //FEMTESTS_ONEDBoundaryCONDITION_H

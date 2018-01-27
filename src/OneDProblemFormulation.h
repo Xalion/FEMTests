@@ -27,7 +27,7 @@
 #define FEMTESTS_ONEDPROBLEMFORMULATION_H
 
 
-#include <BoundryCondition.h>
+#include <BoundaryCondition.h>
 
 #include <vector>
 #include <iostream>
@@ -36,6 +36,8 @@
 namespace FEMTests {
 class OneDProblemFormulation {
 public:
+    typedef int err_t;
+
     int numElements;
 
     std::vector<double> alpha;
@@ -43,11 +45,11 @@ public:
     std::vector<double> f;
     std::vector<double> l;
 
-    BoundryCondition<1> boundryCondition;
+    BoundaryCondition<1> BoundaryCondition;
 
     friend std::ostream &operator<<( std::ostream &os, const OneDProblemFormulation & );
 
-    void setFromXmlString( std::string xmlData );
+    err_t setFromXmlString( std::string xmlData );
 };
 
 }

@@ -25,12 +25,12 @@
 #include <cassert>
 #include <iomanip>
 
-#include "BoundryCondition.h"
+#include "BoundaryCondition.h"
 
 namespace FEMTests {
 
 template<int dim>
-class NeumannTypeBC : public BoundryCondition<dim> {
+class NeumannTypeBC : public BoundaryCondition<dim> {
 public:
     NeumannTypeBC();
 
@@ -38,7 +38,7 @@ public:
 
     double getQ( int inDim = 0 ) const;
 
-    static NeumannTypeBC<dim> parseXmlString( bool &valid, tinyxml2::XMLElement *boundryNode );
+    static NeumannTypeBC<dim> parseXmlString( bool &valid, tinyxml2::XMLElement *BoundaryNode );
 
     template<int T>
     friend std::ostream &operator<<( std::ostream &os, const NeumannTypeBC<T> &bc );
@@ -77,9 +77,9 @@ std::ostream &operator<<( std::ostream &os, const NeumannTypeBC<T> &bc ) {
 }
 
 template<int dim>
-NeumannTypeBC<dim> NeumannTypeBC<dim>::parseXmlString( bool &valid, tinyxml2::XMLElement *boundryNode ) {
+NeumannTypeBC<dim> NeumannTypeBC<dim>::parseXmlString( bool &valid, tinyxml2::XMLElement *BoundaryNode ) {
     NeumannTypeBC<dim> bc;
-    tinyxml2::XMLText *typeNode = boundryNode->FirstChildElement( "Type" )->FirstChild()->ToText();
+    tinyxml2::XMLText *typeNode = BoundaryNode->FirstChildElement( "Type" )->FirstChild()->ToText();
     std::string type( typeNode->Value());
 
     valid = true;
@@ -89,13 +89,13 @@ NeumannTypeBC<dim> NeumannTypeBC<dim>::parseXmlString( bool &valid, tinyxml2::XM
         return bc;
     }
 
-    int dimension = boundryNode->FirstChildElement("Dim")->IntText();
+    int dimension = BoundaryNode->FirstChildElement("Dim")->IntText();
     if ( dimension != dim ) {
         valid = false;
         return bc;
     }
 
-    tinyxml2::XMLElement *currentNode = boundryNode->FirstChildElement( "gamma" );
+    tinyxml2::XMLElement *currentNode = BoundaryNode->FirstChildElement( "gamma" );
     std::vector<double> gammaVec;
     for ( tinyxml2::XMLElement *valueNode = currentNode->FirstChildElement( "value" );
           valueNode != NULL; valueNode = valueNode->NextSiblingElement()) {
@@ -104,7 +104,7 @@ NeumannTypeBC<dim> NeumannTypeBC<dim>::parseXmlString( bool &valid, tinyxml2::XM
     }
     bc.mGamma = gammaVec;
 
-    currentNode = boundryNode->FirstChildElement( "q" );
+    currentNode = BoundaryNode->FirstChildElement( "q" );
     std::vector<double> qVec;
     for ( tinyxml2::XMLElement *valueNode = currentNode->FirstChildElement( "value" );
           valueNode != NULL; valueNode = valueNode->NextSiblingElement()) {

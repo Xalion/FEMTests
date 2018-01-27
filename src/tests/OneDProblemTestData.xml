@@ -30,7 +30,7 @@
         <value>0.4</value>
         <value>0.5</value>
     </l>
-    <BoundryCondition>
+    <BoundaryCondition>
         <Type>Neumann</Type>
         <Dim>1</Dim>
         <gamma>
@@ -39,14 +39,14 @@
         <q>
             <value>0.1</value>
         </q>
-    </BoundryCondition>
+    </BoundaryCondition>
    <!--
-    <BoundryCondition>
+    <BoundaryCondition>
         <Type>Dirichlet</Type>
         <Dim>1</Dim>
         <rho>
             <value>0.1</value>
         </rho>
-    </BoundryCondition>
+    </BoundaryCondition>
     -->
 </ProblemData>

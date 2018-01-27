@@ -22,7 +22,7 @@
 // Created by Adam Blake on 1/26/2018.
 //
 
-#include "BoundryCondition.h"
+#include "BoundaryCondition.h"
 
 namespace FEMTests {
 

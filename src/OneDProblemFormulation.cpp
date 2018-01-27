@@ -48,8 +48,60 @@ std::ostream &operator<<( std::ostream &os, const OneDProblemFormulation &odpf )
     return os;
 }
 
-void OneDProblemFormulation::setFromXmlString( std::string xmlData ) {
+OneDProblemFormulation::err_t OneDProblemFormulation::setFromXmlString( std::string xmlData ) {
+
     tinyxml2::XMLDocument document;
-    document.Parse( xmlData.c_str() );
+    document.Parse( xmlData.c_str());
+
+    tinyxml2::XMLElement *problemData = document.FirstChildElement( "ProblemData" );
+    int dimension = problemData->FirstChildElement( "Dim" )->IntText();
+    if ( dimension != 1 ) {
+        return -1;
+    }
+    int elements = problemData->FirstChildElement( "Elements" )->IntText();
+    numElements = elements;
+
+    std::vector<double> alphaVec;
+    tinyxml2::XMLElement *currentNode = problemData->FirstChildElement( "alpha" );
+    for ( tinyxml2::XMLElement *valueNode = currentNode->FirstChildElement( "value" );
+          valueNode != NULL; valueNode = valueNode->NextSiblingElement()) {
+        double val = valueNode->DoubleText();
+        alphaVec.push_back( val );
+    }
+    alpha = alphaVec;
+
+    std::vector<double> betaVec;
+    currentNode = problemData->FirstChildElement( "alpha" );
+    for ( tinyxml2::XMLElement *valueNode = currentNode->FirstChildElement( "value" );
+          valueNode != NULL; valueNode = valueNode->NextSiblingElement()) {
+        double val = valueNode->DoubleText();
+        betaVec.push_back( val );
+    }
+    beta = betaVec;
+
+    std::vector<double> fVec;
+    currentNode = problemData->FirstChildElement( "alpha" );
+    for ( tinyxml2::XMLElement *valueNode = currentNode->FirstChildElement( "value" );
+          valueNode != NULL; valueNode = valueNode->NextSiblingElement()) {
+        double val = valueNode->DoubleText();
+        fVec.push_back( val );
+    }
+    f = fVec;
+
+    std::vector<double> lVec;
+    currentNode = problemData->FirstChildElement( "alpha" );
+    for ( tinyxml2::XMLElement *valueNode = currentNode->FirstChildElement( "value" );
+          valueNode != NULL; valueNode = valueNode->NextSiblingElement()) {
+        double val = valueNode->DoubleText();
+        lVec.push_back( val );
+    }
+    l = lVec;
+
+    if ( alphaVec.size() != elements || betaVec.size() != elements || fVec.size() != numElements ||
+         lVec.size() != numElements ) {
+        return false;
+    }
+
+    // TODO : boundary element reader
 }
 }

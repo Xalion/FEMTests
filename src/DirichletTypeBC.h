@@ -26,7 +26,7 @@
 #ifndef FEMTESTS_DIRICHLETTYPEBC_H
 #define FEMTESTS_DIRICHLETTYPEBC_H
 
-#include <BoundryCondition.h>
+#include <BoundaryCondition.h>
 
 #include <vector>
 #include <cassert>
@@ -35,7 +35,7 @@
 namespace FEMTests {
 
 template<int dim>
-class DirichletTypeBC : public BoundryCondition<dim> {
+class DirichletTypeBC : public BoundaryCondition<dim> {
 public:
 
     DirichletTypeBC();
@@ -45,7 +45,7 @@ public:
     template<int T>
     friend std::ostream &operator<<( std::ostream &os, const DirichletTypeBC<T> &bc );
 
-    static DirichletTypeBC<dim> parseXmlString( bool &valid, tinyxml2::XMLElement *boundryNode );
+    static DirichletTypeBC<dim> parseXmlString( bool &valid, tinyxml2::XMLElement *BoundaryNode );
 private:
     std::vector<double> mRho;
 
@@ -75,10 +75,10 @@ std::ostream &operator<<( std::ostream &os, const DirichletTypeBC<T> &bc ) {
 }
 
 template<int dim>
-DirichletTypeBC<dim> DirichletTypeBC<dim>::parseXmlString( bool &valid, tinyxml2::XMLElement *boundryNode ) {
+DirichletTypeBC<dim> DirichletTypeBC<dim>::parseXmlString( bool &valid, tinyxml2::XMLElement *BoundaryNode ) {
     DirichletTypeBC<dim> bc;
 
-    tinyxml2::XMLText *typeNode = boundryNode->FirstChildElement( "Type" )->FirstChild()->ToText();
+    tinyxml2::XMLText *typeNode = BoundaryNode->FirstChildElement( "Type" )->FirstChild()->ToText();
     std::string type( typeNode->Value());
     valid = true;
     if ( type != "Dirichlet" ) {
@@ -86,13 +86,13 @@ DirichletTypeBC<dim> DirichletTypeBC<dim>::parseXmlString( bool &valid, tinyxml2
         return bc;
     }
 
-    int dimension = boundryNode->FirstChildElement("Dim")->IntText();
+    int dimension = BoundaryNode->FirstChildElement("Dim")->IntText();
     if ( dimension != dim ) {
         valid = false;
         return bc;
     }
 
-    tinyxml2::XMLElement *currentNode = boundryNode->FirstChildElement( "rho" );
+    tinyxml2::XMLElement *currentNode = BoundaryNode->FirstChildElement( "rho" );
     std::vector<double> rhoVec;
     for ( tinyxml2::XMLElement *valueNode = currentNode->FirstChildElement( "value" );
           valueNode != NULL; valueNode = valueNode->NextSiblingElement()) {

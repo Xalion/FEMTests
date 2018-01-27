@@ -3,7 +3,7 @@ set( CMAKE_CXX_STANDARD 11 )
 set( FEMTests_SOURCE_FILES
         OneDFEMSOlver.cpp
         OneDProblemFormulation.cpp
-        BoundryCondition.cpp
+        BoundaryCondition.cpp
         DirichletTypeBC.cpp
         NeumannTypeBC.cpp
         )
@@ -11,7 +11,7 @@ set( FEMTests_SOURCE_FILES
 set( FEMTests_HEADER_FILES
         OneDFEMSOlver.h
         OneDProblemFormulation.h
-        BoundryCondition.h
+        BoundaryCondition.h
         DirichletTypeBC.h
         NeumannTypeBC.h )
 

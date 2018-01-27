@@ -28,7 +28,7 @@ namespace {
 
 
 std::string sXmlBcData(
-        "<BoundryCondition>"
+        "<BoundaryCondition>"
         "   <Type>Neumann</Type>"
         "   <Dim>1</Dim>"
         "   <gamma>"
@@ -37,7 +37,7 @@ std::string sXmlBcData(
         "   <q>"
         "       <value>0.1</value>"
         "   </q>"
-        "</BoundryCondition>"
+        "</BoundaryCondition>"
 );
 
 }

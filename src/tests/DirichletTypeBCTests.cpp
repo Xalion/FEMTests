@@ -28,13 +28,13 @@ namespace {
 
 
 std::string sXmlBcData(
-        "<BoundryCondition>"
+        "<BoundaryCondition>"
         "   <Type>Dirichlet</Type>"
         "   <Dim>1</Dim>"
         "   <rho>"
         "       <value>0.1</value>"
         "   </rho>"
-        "</BoundryCondition>"
+        "</BoundaryCondition>"
 );
 
 }
