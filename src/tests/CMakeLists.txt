@@ -1,6 +1,6 @@
 #*********************************************************************************************************************
 # Author: Adam Blake (adamb@quantumbear.com)
-# Copyright 2018 Adam Blake
+# Copyright 2017 Adam Blake
 #
 #
 # This file is part of FEMTests.
@@ -17,22 +17,29 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with FEMTests.  If not, see <http://www.gnu.org/licenses/>.
-#*********************************************************************************************************************
-cmake_minimum_required(VERSION 2.8.2)
+#*********************************************************************************************************************/
+project( FEMTestsUnitTests )
 
-project(googletest-download NONE)
+set( TEST_HEADERS
+        )
 
-find_package(Git REQUIRED)
+set( TEST_SOURCES
+        NeumannTypeBCTests.cpp
+         )
 
-include(ExternalProject)
-ExternalProject_Add(
-    googletest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG master
-    SOURCE_DIR "${CMAKE_BINARY_DIR}/googletest-src"
-    BINARY_DIR "${CMAKE_BINARY_DIR}/googletest-build"
-    CONFIGURE_COMMAND ""
-    BUILD_COMMAND ""
-    INSTALL_COMMAND ""
-    TEST_COMMAND ""
-)
+set( testname ${PROJECT_NAME} )
+
+source_group( "Test\\Header Files" FILES ${TEST_HEADERS} )
+source_group( "Test\\Source Files" FILES ${TEST_SOURCES} )
+
+add_executable( ${testname} ${TEST_SOURCES} ${TEST_HEADERS} )
+add_dependencies( ${testname} gtest gtest_main )
+
+target_link_libraries(
+        ${testname}
+        gtest gtest_main
+        ${FEMTEST_LIBRARY}
+        ${GTEST_LIBRARY}
+        ${XML_LIBRARIES}
+        )
+

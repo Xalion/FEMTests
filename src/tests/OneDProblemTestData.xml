@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO8859-1" ?>
+<ProblemData>
+    <Dim>1</Dim>
+    <Elements>5</Elements>
+    <Alpha>
+        <value>0.1</value>
+        <value>0.2</value>
+        <value>0.3</value>
+        <value>0.4</value>
+        <value>0.5</value>
+    </Alpha>
+    <Beta>
+        <value>0.1</value>
+        <value>0.2</value>
+        <value>0.3</value>
+        <value>0.4</value>
+        <value>0.5</value>
+    </Beta>
+    <f>
+        <value>0.1</value>
+        <value>0.2</value>
+        <value>0.3</value>
+        <value>0.4</value>
+        <value>0.5</value>
+    </f>
+    <l>
+        <value>0.1</value>
+        <value>0.2</value>
+        <value>0.3</value>
+        <value>0.4</value>
+        <value>0.5</value>
+    </l>
+    <BoundryCondition>
+        <Type>Neumann</Type>
+        <Dim>1</Dim>
+        <gamma>
+            <value>0.1</value>
+        </gamma>
+        <q>
+            <value>0.1</value>
+        </q>
+    </BoundryCondition>
+    <!-- Do the BC once the readers are done -->
+</ProblemData>

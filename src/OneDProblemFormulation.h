@@ -46,6 +46,8 @@ public:
     BoundryCondition<1> boundryCondition;
 
     friend std::ostream &operator<<( std::ostream &os, const OneDProblemFormulation & );
+
+    void setFromXmlString( std::string xmlData );
 };
 
 }

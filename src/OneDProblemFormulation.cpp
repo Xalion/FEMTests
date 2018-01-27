@@ -24,6 +24,8 @@
 
 #include "OneDProblemFormulation.h"
 
+#include <tinyxml2.h>
+
 namespace FEMTests {
 
 std::ostream &operator<<( std::ostream &os, const OneDProblemFormulation &odpf ) {
@@ -44,5 +46,10 @@ std::ostream &operator<<( std::ostream &os, const OneDProblemFormulation &odpf )
 
     }
     return os;
+}
+
+void OneDProblemFormulation::setFromXmlString( std::string xmlData ) {
+    tinyxml2::XMLDocument document;
+    document.Parse( xmlData.c_str() );
 }
 }

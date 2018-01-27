@@ -26,6 +26,8 @@
 #ifndef FEMTESTS_ONEDBOUNDRYCONDITION_H
 #define FEMTESTS_ONEDBOUNDRYCONDITION_H
 
+#include <tinyxml2.h>
+
 #include <iostream>
 
 namespace FEMTests {
@@ -34,24 +36,16 @@ template< int dim >
 class BoundryCondition
 {
 public:
-    enum class BoundryConditionType {
-        DIRICHLET,
-        NEUMANN
-    };
-
-    BoundryConditionType getBoundryConditionType() const;
 
     int getDim() const;
 
+    // Make one of these for parsing.
+    // static BoundryCondition parseXmlString( bool &valid, tinyxml2::XMLText* boundryNode ) = 0;
+
+    // TODO : write XML type.  Not necissary right off.
 private:
-    BoundryConditionType mType;
 
 };
-
-template<int dim>
-typename BoundryCondition<dim>::BoundryConditionType BoundryCondition<dim>::getBoundryConditionType() const {
-    return mType;
-}
 
 template<int dim>
 int BoundryCondition<dim>::getDim() const { return dim; }

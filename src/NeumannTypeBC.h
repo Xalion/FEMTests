@@ -38,6 +38,39 @@ public:
 
     double getQ( int inDim = 0 ) const;
 
+    static NeumannTypeBC<dim> parseXmlString( bool &valid, tinyxml2::XMLElement *boundryNode ) {
+        NeumannTypeBC<dim> bc;
+        tinyxml2::XMLText *typeNode = boundryNode->FirstChildElement( "Type" )->FirstChild()->ToText();
+        std::string type( typeNode->Value());
+
+        if ( type != "Neumann" ) {
+            valid = false;
+            return bc;
+        }
+
+        int dimension = boundryNode->IntAttribute( "Dim" );
+        if ( dimension != dim ) {
+            valid = false;
+            return bc;
+        }
+
+        tinyxml2::XMLElement *currentNode = boundryNode->FirstChildElement( "gamma" );
+        std::vector<double> gammaVec;
+        for ( tinyxml2::XMLElement *valueNode = currentNode->FirstChildElement( "value" );
+              valueNode != NULL; valueNode = valueNode->NextSiblingElement()) {
+            double val = valueNode->DoubleText();
+            gammaVec.push_back( val );
+        }
+
+        currentNode = boundryNode->FirstChildElement( "q" );
+        std::vector<double> qVec;
+        for ( tinyxml2::XMLElement *valueNode = currentNode->FirstChildElement( "value" );
+              valueNode != NULL; valueNode = valueNode->NextSiblingElement()) {
+            double val = valueNode->DoubleText();
+            gammaVec.push_back( val );
+        }
+    }
+
     template<int T>
     friend std::ostream &operator<<( std::ostream &os, const NeumannTypeBC<T> &bc );
 
