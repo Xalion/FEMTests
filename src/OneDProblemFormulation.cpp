@@ -106,7 +106,7 @@ OneDProblemFormulation::err_t OneDProblemFormulation::setFromXmlString( std::str
     BCReader<1> reader;
     tinyxml2::XMLElement *bcElement = problemData->FirstChildElement( "BoundaryCondition" );
     bool success = false;
-    typename FEMTests::BoundaryCondition<1> bc = reader.readBoundryConditions( success, bcElement );
+    std::shared_ptr< typename FEMTests::BoundaryCondition<1> > bc = reader.readBoundryConditions( success, bcElement );
     if( !success ) {
         return -1;
     }

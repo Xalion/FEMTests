@@ -19,40 +19,23 @@
 * along with FEMTests.  If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************************************************************/
 
-#include <gtest/gtest.h>
-#include <DirichletTypeBC.h>
+//
+// Created by Adam Blake on 1/27/2018.
+//
+
+#ifndef FEMTESTS_KMATRIX_H
+#define FEMTESTS_KMATRIX_H
 
 namespace FEMTests {
-namespace tests {
 
-namespace {
+class KMatrix {
+public:
+    virtual double getElement( const int row, const int column ) const = 0;
+    virtual void setElement( const int row, const int column, double val ) = 0;
 
+    virtual int elementCount() = 0;
 
-std::string sXmlBcData(
-        "<BoundaryCondition>"
-                "   <Type>Dirichlet</Type>"
-                "   <Dim>1</Dim>"
-                "   <rho>"
-                "       <value>0.1</value>"
-                "   </rho>"
-                "</BoundaryCondition>"
-);
+};
 
-}
-
-TEST( DirichletTypeBCTest, testFromXML ) {
-    tinyxml2::XMLDocument doc;
-    doc.Parse( sXmlBcData.c_str());
-    tinyxml2::XMLElement *xmlElement = doc.FirstChild()->ToElement();
-
-    bool isValid = false;
-
-    std::shared_ptr< DirichletTypeBC<1> > bc = DirichletTypeBC<1>::parseXmlString( isValid, xmlElement );
-
-    ASSERT_TRUE( isValid ) << "isValid returned false.";
-    ASSERT_EQ( 1, bc->getDim()) << "getDim returned the wrong value.";
-    ASSERT_EQ( 0.1, bc->getRho( 0 )) << "getRho returned the wrong value";
-}
-
-}
-}
+} // namespace FEMTests
+#endif //FEMTESTS_KMATRIX_H

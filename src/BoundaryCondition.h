@@ -29,6 +29,8 @@
 #include <tinyxml2.h>
 
 #include <iostream>
+#include <Eigen/Dense>
+#include "KMatrix.h"
 
 namespace FEMTests {
 
@@ -42,7 +44,9 @@ public:
     // Make one of these for parsing.
     // static BoundaryCondition parseXmlString( bool &valid, tinyxml2::XMLText* BoundaryNode ) = 0;
 
-    // TODO : write XML type.  Not necissary right off.
+    virtual void applyBoundaryCondition( KMatrix &k ) = 0;
+    virtual void applyBoundaryCondition( Eigen::VectorXd &b, KMatrix &k ) = 0;
+    // TODO : write XML type.  Not necessary right off.
 private:
 
 };

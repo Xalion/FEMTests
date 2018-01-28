@@ -35,6 +35,12 @@ namespace FEMTests {
 
 class MatrixFillOneD {
 public:
+    /**
+     * \brief Compute the diagonal elements for the k matrix.  These are the elements k_i,i
+     *
+     * @param problem
+     * @return
+     */
     static std::vector<double> computeDiagonalElements( const OneDProblemFormulation &problem );
 
     /**
@@ -50,6 +56,7 @@ public:
      */
     static std::vector<double> computeOffDiagonalElements( const OneDProblemFormulation &problem );
 
+    static Eigen::VectorXd computeSolutionVector( const OneDProblemFormulation &problem );
 };
 
 

@@ -18,41 +18,12 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with FEMTests.  If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************************************************************/
+//
+// Created by Adam Blake on 1/27/2018.
+//
 
-#include <gtest/gtest.h>
-#include <DirichletTypeBC.h>
+#include <KMatrix.h>
 
 namespace FEMTests {
-namespace tests {
 
-namespace {
-
-
-std::string sXmlBcData(
-        "<BoundaryCondition>"
-                "   <Type>Dirichlet</Type>"
-                "   <Dim>1</Dim>"
-                "   <rho>"
-                "       <value>0.1</value>"
-                "   </rho>"
-                "</BoundaryCondition>"
-);
-
-}
-
-TEST( DirichletTypeBCTest, testFromXML ) {
-    tinyxml2::XMLDocument doc;
-    doc.Parse( sXmlBcData.c_str());
-    tinyxml2::XMLElement *xmlElement = doc.FirstChild()->ToElement();
-
-    bool isValid = false;
-
-    std::shared_ptr< DirichletTypeBC<1> > bc = DirichletTypeBC<1>::parseXmlString( isValid, xmlElement );
-
-    ASSERT_TRUE( isValid ) << "isValid returned false.";
-    ASSERT_EQ( 1, bc->getDim()) << "getDim returned the wrong value.";
-    ASSERT_EQ( 0.1, bc->getRho( 0 )) << "getRho returned the wrong value";
-}
-
-}
-}
+} // namespace FEMTests

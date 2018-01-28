@@ -69,4 +69,17 @@ if ( BUILD_TINYXML2 )
     string(STRIP "${XML_LIBRARIES}" XML_LIBRARIES )
 endif()
 
+configure_file( EigenCmake.in eigen-download/CMakeLists.txt )
+
+execute_process( COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
+        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/eigen-download" )
+execute_process( COMMAND "${CMAKE_COMMAND}" --build .
+        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/eigen-download" )
+
+#add_subdirectory( "${CMAKE_BINARY_DIR}/eigen-src/Eigen"
+#        "${CMAKE_BINARY_DIR}/eigen-build" )
+
+set( EIGEN_LIBRARIES )
+set( EIGEN_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/eigen-src/" )
+
 add_subdirectory( src )

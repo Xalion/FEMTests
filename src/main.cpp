@@ -13,9 +13,15 @@ int main() {
 
     std::cout << problem << std::endl;
 
-    FEMTests::KMatrixOneD k( problem );
-    k.computeMatrixFill();
+    FEMTests::KMatrixOneD kM( problem );
+    kM.computeMatrixFill();
+    std::cout << kM << std::endl;
 
-    std::cout << k << std::endl;
+    Eigen::VectorXd b = FEMTests::MatrixFillOneD::computeSolutionVector( problem );
+    Eigen::MatrixXd k = kM.getMatrix();
+
+    Eigen::VectorXd x = k.colPivHouseholderQr().solve( b );
+
+    std::cout << x << std::endl;
     return 0;
 }

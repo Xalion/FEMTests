@@ -1,4 +1,4 @@
-set( CMAKE_CXX_STANDARD 11 )
+set( CMAKE_CXX_STANDARD 14 )
 
 set( FEMTests_SOURCE_FILES
         OneDFEMSOlver.cpp
@@ -9,7 +9,8 @@ set( FEMTests_SOURCE_FILES
         BCReader.cpp
         Utility/SampleProblem.cpp
         MatrixFillOneD.cpp
-        KMatrixOneD.cpp )
+        KMatrixOneD.cpp
+        KMatrix.cpp )
 
 set( FEMTests_HEADER_FILES
         OneDFEMSOlver.h
@@ -20,9 +21,10 @@ set( FEMTests_HEADER_FILES
         BCReader.h
         Utility/SampleProblem.h
         MatrixFillOneD.h
-        KMatrixOneD.h )
+        KMatrixOneD.h
+        KMatrix.h )
 
-include_directories( ${CMAKE_CURRENT_LIST_DIR} ${XML_INCLUDE_DIRS} )
+include_directories( ${CMAKE_CURRENT_LIST_DIR} ${XML_INCLUDE_DIRS} ${EIGEN_INCLUDE_DIRS} )
 
 set( FEMTEST_LIBRARY femtestlib CACHE STRING "" FORCE )
 

@@ -23,32 +23,37 @@
 // Created by Adam Blake on 1/27/2018.
 //
 
-#ifndef FEMTESTS_KMATRIX_H
-#define FEMTESTS_KMATRIX_H
+#ifndef FEMTESTS_KMATRIXONED
+#define FEMTESTS_KMATRIXONED
 
 #include <OneDProblemFormulation.h>
 #include <MatrixFillOneD.h>
 
+#include <Eigen/Dense>
+#include <KMatrix.h>
+
 namespace FEMTests {
 
-class KMatrixOneD {
+class KMatrixOneD : public KMatrix {
 public:
-    KMatrixOneD( const OneDProblemFormulation& problem );
+    KMatrixOneD( const OneDProblemFormulation &problem );
 
     void computeMatrixFill();
 
-    std::vector< double > getDiagonalElements();
-
     friend std::ostream &operator<<( std::ostream &os, const KMatrixOneD &k );
 
-    double getElement( int row, int column ) const;
+    double getElement( const int row, const int column ) const override;
 
+    void setElement( const int row, const int column, double val ) override;
+
+    int elementCount() override;
+
+    Eigen::MatrixXd& getMatrix();
 private:
+    Eigen::MatrixXd mMatrix;
     const OneDProblemFormulation mProblem;
-    std::vector< double > mDiagonalVector;
-    std::vector< double > mOffDiagonalVector;
 };
 
 
 } // namespace FEMTests
-#endif //FEMTESTS_KMATRIX_H
+#endif //FEMTESTS_KMATRIXONED

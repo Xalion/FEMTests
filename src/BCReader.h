@@ -31,16 +31,18 @@
 #include <NeumannTypeBC.h>
 #include <DirichletTypeBC.h>
 
+#include <memory>
+
 namespace FEMTests {
 
 template<int dim>
 class BCReader {
 public:
 
-    BoundaryCondition<dim> readBoundryConditions( bool &success, tinyxml2::XMLElement *boundryNode ) {
+    std::shared_ptr< BoundaryCondition<dim> > readBoundryConditions( bool &success, tinyxml2::XMLElement *boundryNode ) {
         success = false;
         
-        BoundaryCondition<dim> bc;
+        std::shared_ptr< BoundaryCondition<dim> > bc;
 
         bc = tryReader<NeumannTypeBC<dim>>( success, boundryNode );
         if( success ) {
@@ -57,7 +59,7 @@ public:
 
 private:
     template<typename T>
-    BoundaryCondition<dim> tryReader( bool &success, tinyxml2::XMLElement *boundryNode ) {
+    std::shared_ptr< BoundaryCondition<dim> > tryReader( bool &success, tinyxml2::XMLElement *boundryNode ) {
         return T::parseXmlString( success, boundryNode );
     }
 };

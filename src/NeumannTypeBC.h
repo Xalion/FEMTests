@@ -24,6 +24,7 @@
 #include <vector>
 #include <cassert>
 #include <iomanip>
+#include <memory>
 
 #include "BoundaryCondition.h"
 
@@ -38,10 +39,14 @@ public:
 
     double getQ( int inDim = 0 ) const;
 
-    static NeumannTypeBC<dim> parseXmlString( bool &valid, tinyxml2::XMLElement *BoundaryNode );
+    static std::shared_ptr<NeumannTypeBC<dim> > parseXmlString( bool &valid, tinyxml2::XMLElement *BoundaryNode );
 
     template<int T>
     friend std::ostream &operator<<( std::ostream &os, const NeumannTypeBC<T> &bc );
+
+    void applyBoundaryCondition( KMatrix &k ) override;
+
+    void applyBoundaryCondition( Eigen::VectorXd &b, KMatrix &k ) override;
 
 private:
     std::vector<double> mGamma;
@@ -77,8 +82,10 @@ std::ostream &operator<<( std::ostream &os, const NeumannTypeBC<T> &bc ) {
 }
 
 template<int dim>
-NeumannTypeBC<dim> NeumannTypeBC<dim>::parseXmlString( bool &valid, tinyxml2::XMLElement *BoundaryNode ) {
-    NeumannTypeBC<dim> bc;
+std::shared_ptr<NeumannTypeBC<dim> > NeumannTypeBC<dim>::parseXmlString( bool &valid,
+                                                                         tinyxml2::XMLElement *BoundaryNode ) {
+    std::shared_ptr<NeumannTypeBC<dim> > bc = std::make_shared<NeumannTypeBC<dim> >();
+
     tinyxml2::XMLText *typeNode = BoundaryNode->FirstChildElement( "Type" )->FirstChild()->ToText();
     std::string type( typeNode->Value());
 
@@ -89,7 +96,7 @@ NeumannTypeBC<dim> NeumannTypeBC<dim>::parseXmlString( bool &valid, tinyxml2::XM
         return bc;
     }
 
-    int dimension = BoundaryNode->FirstChildElement("Dim")->IntText();
+    int dimension = BoundaryNode->FirstChildElement( "Dim" )->IntText();
     if ( dimension != dim ) {
         valid = false;
         return bc;
@@ -102,7 +109,7 @@ NeumannTypeBC<dim> NeumannTypeBC<dim>::parseXmlString( bool &valid, tinyxml2::XM
         double val = valueNode->DoubleText();
         gammaVec.push_back( val );
     }
-    bc.mGamma = gammaVec;
+    bc->mGamma = gammaVec;
 
     currentNode = BoundaryNode->FirstChildElement( "q" );
     std::vector<double> qVec;
@@ -111,9 +118,20 @@ NeumannTypeBC<dim> NeumannTypeBC<dim>::parseXmlString( bool &valid, tinyxml2::XM
         double val = valueNode->DoubleText();
         qVec.push_back( val );
     }
-    bc.mQ = qVec;
+    bc->mQ = qVec;
     return bc;
 }
 
+template<int dim>
+void NeumannTypeBC<dim>::applyBoundaryCondition( KMatrix &k ) {
+    int n = k.elementCount() - 1;
+    k.setElement( n, n, k.getElement( n, n ) + mGamma[ dim ] );
+}
+
+template<int dim>
+void NeumannTypeBC<dim>::applyBoundaryCondition( Eigen::VectorXd &b, KMatrix &k ) {
+    int n = k.elementCount() - 1;
+    b( n ) = b( n ) + mQ[ dim ];
+}
 } // namespace FEMTests
 #endif //FEMTESTS_NEUMANNTYPEBC_H

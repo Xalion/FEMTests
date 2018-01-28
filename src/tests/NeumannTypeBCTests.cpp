@@ -50,12 +50,12 @@ TEST( NeumannTypeBCTests, testFromXML ) {
 
     bool isValid = false;
 
-    NeumannTypeBC<1> bc = NeumannTypeBC<1>::parseXmlString( isValid, xmlElement );
+    std::shared_ptr< NeumannTypeBC<1> > bc = NeumannTypeBC<1>::parseXmlString( isValid, xmlElement );
 
     ASSERT_TRUE( isValid ) << "isValid returned false.";
-    ASSERT_EQ( 1, bc.getDim()) << "getDim returned the wrong value.";
-    ASSERT_EQ( 0.1, bc.getGamma( 0 )) << "getGamma returned the wrong value";
-    ASSERT_EQ( 0.1, bc.getQ( 0 )) << "getQ returned the wrong value.";
+    ASSERT_EQ( 1, bc->getDim()) << "getDim returned the wrong value.";
+    ASSERT_EQ( 0.1, bc->getGamma( 0 )) << "getGamma returned the wrong value";
+    ASSERT_EQ( 0.1, bc->getQ( 0 )) << "getQ returned the wrong value.";
 }
 
 }

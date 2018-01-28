@@ -1,0 +1,38 @@
+#*********************************************************************************************************************
+# Author: Adam Blake (adamb@quantumbear.com)
+# Copyright 2018 Adam Blake
+#
+#
+# This file is part of FEMTests.
+#
+# FEMTests is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# FEMTests is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with FEMTests.  If not, see <http://www.gnu.org/licenses/>.
+#*********************************************************************************************************************
+cmake_minimum_required(VERSION 2.8.2)
+
+project(eigen-download NONE)
+
+find_package(Git REQUIRED)
+
+include(ExternalProject)
+ExternalProject_Add(
+    eigen
+    GIT_REPOSITORY https://github.com/eigenteam/eigen-git-mirror
+    GIT_TAG master
+    SOURCE_DIR "${CMAKE_BINARY_DIR}/eigen-src"
+    BINARY_DIR "${CMAKE_BINARY_DIR}/eigen-build"
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+    INSTALL_COMMAND ""
+    TEST_COMMAND ""
+)

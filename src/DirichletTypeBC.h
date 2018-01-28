@@ -31,6 +31,7 @@
 #include <vector>
 #include <cassert>
 #include <iomanip>
+#include <memory>
 
 namespace FEMTests {
 
@@ -45,7 +46,12 @@ public:
     template<int T>
     friend std::ostream &operator<<( std::ostream &os, const DirichletTypeBC<T> &bc );
 
-    static DirichletTypeBC<dim> parseXmlString( bool &valid, tinyxml2::XMLElement *BoundaryNode );
+    void applyBoundaryCondition( KMatrix &k ) override;
+
+    void applyBoundaryCondition( Eigen::VectorXd &b, KMatrix &k ) override;
+
+    static std::shared_ptr< DirichletTypeBC<1> > parseXmlString( bool &valid, tinyxml2::XMLElement *BoundaryNode );
+
 private:
     std::vector<double> mRho;
 
@@ -75,8 +81,9 @@ std::ostream &operator<<( std::ostream &os, const DirichletTypeBC<T> &bc ) {
 }
 
 template<int dim>
-DirichletTypeBC<dim> DirichletTypeBC<dim>::parseXmlString( bool &valid, tinyxml2::XMLElement *BoundaryNode ) {
-    DirichletTypeBC<dim> bc;
+std::shared_ptr< DirichletTypeBC<1> > DirichletTypeBC<dim>::parseXmlString( bool &valid,
+                                                         tinyxml2::XMLElement *BoundaryNode ) {
+    std::shared_ptr<DirichletTypeBC<dim> > bc = std::make_shared<DirichletTypeBC<dim> >();
 
     tinyxml2::XMLText *typeNode = BoundaryNode->FirstChildElement( "Type" )->FirstChild()->ToText();
     std::string type( typeNode->Value());
@@ -86,7 +93,7 @@ DirichletTypeBC<dim> DirichletTypeBC<dim>::parseXmlString( bool &valid, tinyxml2
         return bc;
     }
 
-    int dimension = BoundaryNode->FirstChildElement("Dim")->IntText();
+    int dimension = BoundaryNode->FirstChildElement( "Dim" )->IntText();
     if ( dimension != dim ) {
         valid = false;
         return bc;
@@ -99,9 +106,43 @@ DirichletTypeBC<dim> DirichletTypeBC<dim>::parseXmlString( bool &valid, tinyxml2
         double val = valueNode->DoubleText();
         rhoVec.push_back( val );
     }
-    bc.mRho = rhoVec;
+    bc->mRho = rhoVec;
     return bc;
 }
+
+/**
+ * \brief Formula 3.60 and 3.63 in Jin on page 49.
+ *
+ * Right now this is 1D only.  Need to update it for other dimensions.
+ * @tparam dim
+ * @param k
+ */
+template<int dim>
+void DirichletTypeBC<dim>::applyBoundaryCondition( KMatrix &k ) {
+
+    if ( dim == 1 ) {
+        k.setElement( 0, 0, 1.0 ); // K_11 = 1
+        // K_1j = 0, K_j1 = 0
+        for ( int ii = 1; ii < k.elementCount(); ii++ ) {
+            k.setElement( 0, ii, 0.0 );
+            k.setElement( ii, 0, 0.0 );
+        }
+    } else {
+        assert( "write me" );
+    }
+}
+
+template<int dim>
+void DirichletTypeBC<dim>::applyBoundaryCondition( Eigen::VectorXd &b, KMatrix &k ) {
+    if ( dim == 1 ) {
+        b( 0 ) = getRho( 0 ); // 3.60 pp 49
+        // 3.63 pp 49
+        for ( int ii = 1; ii < b.size(); ii++ ) {
+            b( ii ) = b( ii ) - k.getElement( ii, 0 ) * getRho( 0 );
+        }
+    }
+}
+
 }
 
 

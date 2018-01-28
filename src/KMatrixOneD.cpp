@@ -29,13 +29,36 @@ namespace FEMTests {
 KMatrixOneD::KMatrixOneD( const OneDProblemFormulation &problem ) : mProblem( problem ) {}
 
 void KMatrixOneD::computeMatrixFill() {
-    mDiagonalVector = MatrixFillOneD::computeDiagonalElements( mProblem );
-    mOffDiagonalVector = MatrixFillOneD::computeOffDiagonalElements( mProblem );
-    // TODO - off diagonal elements;
-}
+    mMatrix = Eigen::MatrixXd::Constant( mProblem.numElements, mProblem.numElements, 0 );
+    std::vector<double> diagonalVector = MatrixFillOneD::computeDiagonalElements( mProblem );
+    std::vector<double> offDiagonalVector = MatrixFillOneD::computeOffDiagonalElements( mProblem );
 
-std::vector<double> KMatrixOneD::getDiagonalElements() {
-    return mDiagonalVector;
+    auto mapElement = [ &diagonalVector, &offDiagonalVector ]( int row, int column ) {
+        if ( row == column ) {
+            return diagonalVector[ row ];
+        } else if ( row == column + 1 ) {
+            return offDiagonalVector[ column ];
+        } else if ( row + 1 == column ) {
+            return offDiagonalVector[ row ];
+        } else {
+            return 0.0;
+        };
+    };
+
+    for ( int row = 0; row < mProblem.numElements; row++ ) {
+        setElement( row, row, mapElement( row, row ));
+    }
+
+    for ( int row = 0; row < mProblem.numElements; row++ ) {
+        if ( row < mProblem.numElements - 1 ) {
+            setElement( row, row + 1, mapElement( row, row + 1 ));
+            setElement( row + 1, row, mapElement( row + 1, row ));
+        }
+    }
+
+    setElement( 0, 1, mapElement( 0, 1 ));
+    setElement( mProblem.numElements-1, mProblem.numElements - 2,
+                mapElement( mProblem.numElements-1, mProblem.numElements - 2 ));
 }
 
 std::ostream &operator<<( std::ostream &os, const KMatrixOneD &k ) {
@@ -43,8 +66,8 @@ std::ostream &operator<<( std::ostream &os, const KMatrixOneD &k ) {
     os << " K Matrix:" << std::endl;
     os << "*******************************************************************************" << std::endl;
 
-    for( int row = 0; row < k.mProblem.numElements; row ++ ) {
-        for( int column =  0; column < k.mProblem.numElements; column ++ ) {
+    for ( int row = 0; row < k.mProblem.numElements; row++ ) {
+        for ( int column = 0; column < k.mProblem.numElements; column++ ) {
             os << std::setw( 10 ) << k.getElement( row, column );
         }
         os << std::endl;
@@ -55,14 +78,19 @@ std::ostream &operator<<( std::ostream &os, const KMatrixOneD &k ) {
 }
 
 double KMatrixOneD::getElement( int row, int column ) const {
-    if( row == column ) {
-        return mDiagonalVector[ row ];
-    } else if ( row == column+1 ) {
-        return mOffDiagonalVector[ row ];
-    } else if( row + 1 == column ) {
-        return mOffDiagonalVector[ column ];
-    } else {
-        return 0.0;
-    };
+    return mMatrix( row, column );
 }
+
+void KMatrixOneD::setElement( const int row, const int column, double val ) {
+    mMatrix( row, column ) = val;
+}
+
+int KMatrixOneD::elementCount() {
+    return mProblem.numElements;
+}
+
+Eigen::MatrixXd &KMatrixOneD::getMatrix() {
+    return mMatrix;
+}
+
 } // namespace FEMTests

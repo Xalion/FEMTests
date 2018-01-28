@@ -26,6 +26,11 @@
 
 namespace FEMTests {
 
+/**
+ * \brief Formulas 3.48 - 3.50 in Jin, page 48
+ * @param problem
+ * @return
+ */
 std::vector<double> MatrixFillOneD::computeDiagonalElements( const OneDProblemFormulation &problem ) {
     std::vector<double> diagonalElements;
 
@@ -48,6 +53,11 @@ std::vector<double> MatrixFillOneD::computeDiagonalElements( const OneDProblemFo
     return diagonalElements;
 }
 
+/**
+ * \brief Formula 3.51 in Jin, page 48
+ * @param problem
+ * @return
+ */
 std::vector<double> MatrixFillOneD::computeOffDiagonalElements( const OneDProblemFormulation &problem ) {
 
     std::vector< double > offDiagonalElements;
@@ -63,5 +73,29 @@ std::vector<double> MatrixFillOneD::computeOffDiagonalElements( const OneDProble
     }
 
     return offDiagonalElements;
+}
+
+/**
+ * \brief Formulas 3.52 - 3.54 in Jin page 48
+ * @param problem
+ * @return
+ */
+Eigen::VectorXd MatrixFillOneD::computeSolutionVector( const OneDProblemFormulation &problem ) {
+    Eigen::VectorXd b = Eigen::VectorXd::Constant( problem.numElements, 0.0 );
+
+    auto bi = [ &problem ]( int index ) {
+        return problem.f[ index ] * problem.l[ index ] / 2.0;
+    };
+
+    int currentIndex = 0;
+    b[currentIndex] = bi(currentIndex);
+
+    for( currentIndex = 1; currentIndex < problem.numElements - 1; currentIndex ++ ) {
+        b[currentIndex] = b[currentIndex - 1] + b[currentIndex];
+    }
+
+    b[currentIndex] = bi(currentIndex);
+
+    return b;
 }
 } // namespace FEMTests

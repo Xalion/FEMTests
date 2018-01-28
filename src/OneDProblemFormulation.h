@@ -32,6 +32,7 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <memory>
 
 namespace FEMTests {
 class OneDProblemFormulation {
@@ -45,7 +46,7 @@ public:
     std::vector<double> f;
     std::vector<double> l;
 
-    BoundaryCondition<1> boundaryCondition;
+    std::shared_ptr< BoundaryCondition<1> > boundaryCondition;
 
     friend std::ostream &operator<<( std::ostream &os, const OneDProblemFormulation & );
 
