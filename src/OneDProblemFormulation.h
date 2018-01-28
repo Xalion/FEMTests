@@ -33,6 +33,8 @@
 #include <iostream>
 #include <iomanip>
 #include <memory>
+#include "NeumannTypeBC.h"
+#include "DirichletTypeBC.h"
 
 namespace FEMTests {
 class OneDProblemFormulation {
@@ -46,7 +48,8 @@ public:
     std::vector<double> f;
     std::vector<double> l;
 
-    std::shared_ptr< BoundaryCondition<1> > boundaryCondition;
+    std::shared_ptr< NeumannTypeBC<1> > endNodeBG;
+    std::shared_ptr< DirichletTypeBC<1> > startNode;
 
     friend std::ostream &operator<<( std::ostream &os, const OneDProblemFormulation & );
 

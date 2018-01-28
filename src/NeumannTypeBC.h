@@ -44,7 +44,7 @@ public:
     template<int T>
     friend std::ostream &operator<<( std::ostream &os, const NeumannTypeBC<T> &bc );
 
-    void applyBoundaryCondition( KMatrix &k ) override;
+    void applyBoundaryCondition( KMatrix &k );
 
     void applyBoundaryCondition( Eigen::VectorXd &b, KMatrix &k ) override;
 
@@ -125,13 +125,14 @@ std::shared_ptr<NeumannTypeBC<dim> > NeumannTypeBC<dim>::parseXmlString( bool &v
 template<int dim>
 void NeumannTypeBC<dim>::applyBoundaryCondition( KMatrix &k ) {
     int n = k.elementCount() - 1;
-    k.setElement( n, n, k.getElement( n, n ) + mGamma[ dim ] );
+    k.setElement( n, n, k.getElement( n, n ) + mGamma[ dim - 1 ] );
 }
 
 template<int dim>
 void NeumannTypeBC<dim>::applyBoundaryCondition( Eigen::VectorXd &b, KMatrix &k ) {
+    applyBoundaryCondition( k );
     int n = k.elementCount() - 1;
-    b( n ) = b( n ) + mQ[ dim ];
+    b( n ) = b( n ) + mQ[ dim - 1 ];
 }
 } // namespace FEMTests
 #endif //FEMTESTS_NEUMANNTYPEBC_H

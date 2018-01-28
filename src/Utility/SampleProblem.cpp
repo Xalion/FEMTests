@@ -70,7 +70,6 @@ static std::string OneDNeumannProblem (
 "<value>0.1</value>"
 "</q>"
 "</BoundaryCondition>"
-"<!--"
 "<BoundaryCondition>"
 "<Type>Dirichlet</Type>"
 "<Dim>1</Dim>"
@@ -78,7 +77,6 @@ static std::string OneDNeumannProblem (
 "<value>0.1</value>"
 "</rho>"
 "</BoundaryCondition>"
-"-->"
 "</ProblemData>"
 );
 } // namespace samples

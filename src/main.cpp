@@ -18,8 +18,13 @@ int main() {
     std::cout << kM << std::endl;
 
     Eigen::VectorXd b = FEMTests::MatrixFillOneD::computeSolutionVector( problem );
-    Eigen::MatrixXd k = kM.getMatrix();
 
+    problem.endNodeBG->applyBoundaryCondition( b, kM );
+    problem.startNode->applyBoundaryCondition( b, kM );
+
+    std::cout << kM << std::endl;
+
+    Eigen::MatrixXd k = kM.getMatrix();
     Eigen::VectorXd x = k.colPivHouseholderQr().solve( b );
 
     std::cout << x << std::endl;

@@ -44,7 +44,6 @@ public:
     // Make one of these for parsing.
     // static BoundaryCondition parseXmlString( bool &valid, tinyxml2::XMLText* BoundaryNode ) = 0;
 
-    virtual void applyBoundaryCondition( KMatrix &k ) = 0;
     virtual void applyBoundaryCondition( Eigen::VectorXd &b, KMatrix &k ) = 0;
     // TODO : write XML type.  Not necessary right off.
 private:

@@ -103,19 +103,43 @@ OneDProblemFormulation::err_t OneDProblemFormulation::setFromXmlString( std::str
         return -1;
     }
 
-    BCReader<1> reader;
-    tinyxml2::XMLElement *bcElement = problemData->FirstChildElement( "BoundaryCondition" );
-    bool success = false;
-    std::shared_ptr< typename FEMTests::BoundaryCondition<1> > bc = reader.readBoundryConditions( success, bcElement );
-    if( !success ) {
-        return -1;
+    BCReader reader;
+    tinyxml2::XMLElement *bcElement;
+    bool foundNeumann = false, foundDirichlet = false;
+    std::shared_ptr<NeumannTypeBC<1> > neumannBC;
+    std::shared_ptr<DirichletTypeBC<1> > dirichletBC;
+
+    auto tryAndMaybeSetNeumann = [ & ]() {
+        if ( !foundNeumann ) {
+            neumannBC = reader.tryReader<NeumannTypeBC<1> >( foundNeumann, bcElement );
+            if ( foundNeumann ) {
+                endNodeBG = neumannBC;
+            }
+        }
+    };
+
+    auto tryAndMaybeSetDirichlet = [ & ]() {
+        if ( !foundDirichlet ) {
+            dirichletBC = reader.tryReader<DirichletTypeBC<1> >( foundDirichlet, bcElement );
+            if ( foundDirichlet ) {
+                startNode = dirichletBC;
+            }
+        }
+    };
+
+    for( bcElement = problemData->FirstChildElement( "BoundaryCondition");
+            bcElement != NULL; bcElement = bcElement->NextSiblingElement() ) {
+        tryAndMaybeSetDirichlet();
+        tryAndMaybeSetNeumann();
     }
 
-    boundaryCondition = bc;
+    if ( !foundNeumann || !foundDirichlet ) {
+        return -1;
+    }
     return 0;
 }
 
 bool OneDProblemFormulation::isEdgeElement( int elementIndex ) {
-    return elementIndex == 0 || elementIndex == ( numElements - 1);
+    return elementIndex == 0 || elementIndex == ( numElements - 1 );
 }
 }

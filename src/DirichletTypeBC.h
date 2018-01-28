@@ -46,7 +46,7 @@ public:
     template<int T>
     friend std::ostream &operator<<( std::ostream &os, const DirichletTypeBC<T> &bc );
 
-    void applyBoundaryCondition( KMatrix &k ) override;
+    void applyBoundaryCondition( KMatrix &k );
 
     void applyBoundaryCondition( Eigen::VectorXd &b, KMatrix &k ) override;
 
@@ -119,8 +119,8 @@ std::shared_ptr< DirichletTypeBC<1> > DirichletTypeBC<dim>::parseXmlString( bool
  */
 template<int dim>
 void DirichletTypeBC<dim>::applyBoundaryCondition( KMatrix &k ) {
-
     if ( dim == 1 ) {
+
         k.setElement( 0, 0, 1.0 ); // K_11 = 1
         // K_1j = 0, K_j1 = 0
         for ( int ii = 1; ii < k.elementCount(); ii++ ) {
@@ -134,6 +134,7 @@ void DirichletTypeBC<dim>::applyBoundaryCondition( KMatrix &k ) {
 
 template<int dim>
 void DirichletTypeBC<dim>::applyBoundaryCondition( Eigen::VectorXd &b, KMatrix &k ) {
+    applyBoundaryCondition( k );
     if ( dim == 1 ) {
         b( 0 ) = getRho( 0 ); // 3.60 pp 49
         // 3.63 pp 49

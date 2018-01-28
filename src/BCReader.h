@@ -35,33 +35,33 @@
 
 namespace FEMTests {
 
-template<int dim>
 class BCReader {
 public:
 
-    std::shared_ptr< BoundaryCondition<dim> > readBoundryConditions( bool &success, tinyxml2::XMLElement *boundryNode ) {
-        success = false;
-        
-        std::shared_ptr< BoundaryCondition<dim> > bc;
-
-        bc = tryReader<NeumannTypeBC<dim>>( success, boundryNode );
-        if( success ) {
-            return bc;
-        }
-
-        bc = tryReader<DirichletTypeBC<dim>>( success, boundryNode );
-        if( success ) {
-            return bc;
-        }
-
-        return bc;
+//    std::shared_ptr< BoundaryCondition<dim> > readBoundryConditions( bool &success, tinyxml2::XMLElement *boundryNode ) {
+//        success = false;
+//
+//        std::shared_ptr< BoundaryCondition<dim> > bc;
+//
+//        bc = tryReader<NeumannTypeBC<dim>>( success, boundryNode );
+//        if( success ) {
+//            return bc;
+//        }
+//
+//        bc = tryReader<DirichletTypeBC<dim>>( success, boundryNode );
+//        if( success ) {
+//            return bc;
+//        }
+//
+//        return bc;
+//    }
+    template<typename T>
+    std::shared_ptr< T > tryReader( bool &success, tinyxml2::XMLElement *boundryNode ) const {
+        return T::parseXmlString( success, boundryNode );
     }
 
 private:
-    template<typename T>
-    std::shared_ptr< BoundaryCondition<dim> > tryReader( bool &success, tinyxml2::XMLElement *boundryNode ) {
-        return T::parseXmlString( success, boundryNode );
-    }
+
 };
 
 
